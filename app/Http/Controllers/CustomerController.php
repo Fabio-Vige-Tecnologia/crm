@@ -2,57 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\CustomerResource;
+use App\Http\Responses\ErrorResponse;
 use App\Models\Customer;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class CustomerController extends Controller
 {
-    // Listar todos os clientes
-    public function index()
+    public function index(): AnonymousResourceCollection|JsonResponse
     {
-        return Customer::all();
+        try {
+            $customers = Customer::query()->paginate(10);
+
+            return CustomerResource::collection($customers);
+        } catch (ModelNotFoundException $e) {
+            return ErrorResponse::make(__('messages.not_found'), Response::HTTP_NOT_FOUND);
+        }
     }
 
-    // Mostrar um cliente específico
-    public function show(Customer $customer)
+    public function show(int $id): CustomerResource|JsonResponse
     {
-        return $customer;
+        try {
+            $customer = Customer::findOrFail($id);
+
+            return new CustomerResource($customer);
+        } catch (ModelNotFoundException $e) {
+            return ErrorResponse::make(__('messages.not_found'), Response::HTTP_NOT_FOUND);
+        }
     }
 
-    // Criar um novo cliente
-    public function store(Request $request)
+    public function store(StoreCustomerRequest $request): CustomerResource|JsonResponse
     {
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:customers',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-        ]);
+        $customer = Customer::create($request->validated());
 
-        $customer = Customer::create($validatedData);
-        return response()->json($customer, 201);
+        return new CustomerResource($customer);
     }
 
-    // Atualizar um cliente existente
-    public function update(Request $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer): CustomerResource|JsonResponse
     {
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:customers,email,' . $customer->id,
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-        ]);
+        try {
+            $customer->update($request->validated());
 
-        $customer->update($validatedData);
-        return response()->json($customer);
+            return response()->json($customer);
+        } catch (ModelNotFoundException $e) {
+            return ErrorResponse::make(__('messages.not_found'), Response::HTTP_NOT_FOUND);
+        }
     }
 
     // Deletar um cliente
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer): JsonResponse
     {
         $customer->delete();
+
         return response()->json(null, 204);
     }
 }

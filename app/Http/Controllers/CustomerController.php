@@ -12,10 +12,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
-class CustomerController extends Controller
-{
-    public function index(): AnonymousResourceCollection|JsonResponse
-    {
+class CustomerController extends Controller {
+    public function index(): AnonymousResourceCollection|JsonResponse {
         try {
             $customers = Customer::query()->paginate(10);
 
@@ -25,8 +23,7 @@ class CustomerController extends Controller
         }
     }
 
-    public function show(int $id): CustomerResource|JsonResponse
-    {
+    public function show(int $id): CustomerResource|JsonResponse {
         try {
             $customer = Customer::findOrFail($id);
 
@@ -36,15 +33,13 @@ class CustomerController extends Controller
         }
     }
 
-    public function store(StoreCustomerRequest $request): CustomerResource|JsonResponse
-    {
+    public function store(StoreCustomerRequest $request): CustomerResource|JsonResponse {
         $customer = Customer::create($request->validated());
 
         return new CustomerResource($customer);
     }
 
-    public function update(UpdateCustomerRequest $request, Customer $customer): CustomerResource|JsonResponse
-    {
+    public function update(UpdateCustomerRequest $request, Customer $customer): CustomerResource|JsonResponse {
         try {
             $customer->update($request->validated());
 
@@ -55,8 +50,7 @@ class CustomerController extends Controller
     }
 
     // Deletar um cliente
-    public function destroy(Customer $customer): JsonResponse
-    {
+    public function destroy(Customer $customer): JsonResponse {
         $customer->delete();
 
         return response()->json(null, 204);

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-class DashboardController extends Controller
-{
-    public function index(): array
-    {
+class DashboardController extends Controller {
+    public function index(): array {
         return [];
     }
 }

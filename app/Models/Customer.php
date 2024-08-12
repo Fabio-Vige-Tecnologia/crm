@@ -39,11 +39,11 @@ class Customer extends Model {
         $this->attributes['updated_at'] = $value ? Carbon::parse($value)->setTimezone('America/Sao_Paulo') : null;
     }
 
-    public function getDeletedAtAttribute(string $value): ?string {
+    public function getDeletedAtAttribute(?string $value): ?string {
         return $value ? Carbon::parse($value)->setTimezone('America/Sao_Paulo')->format('d/m/Y H:i:s') : null;
     }
 
-    public function setDeletedAtAttribute(string $value): void {
+    public function setDeletedAtAttribute(?string $value): void {
         $this->attributes['deleted_at'] = $value ? Carbon::parse($value)->setTimezone('America/Sao_Paulo') : null;
     }
 }

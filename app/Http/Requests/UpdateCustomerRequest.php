@@ -18,10 +18,12 @@ class UpdateCustomerRequest extends FormRequest {
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array {
+        $customerId = $this->route('customer')->id ?? $this->route('customer');
+
         return [
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
-            'email'      => 'required|string|email|max:255|unique:customers,email,'.$this->id,
+            'email'      => 'required|string|email|max:255|unique:customers,email,'.$customerId,
             'phone'      => 'nullable|string|max:20',
         ];
     }

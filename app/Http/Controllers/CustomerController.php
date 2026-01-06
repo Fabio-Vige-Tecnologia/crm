@@ -2,57 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CustomerController extends Controller
 {
-    // Listar todos os clientes
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): AnonymousResourceCollection
     {
-        return Customer::all();
+        $this->authorize('viewAny', Customer::class);
+
+        $customers = Customer::latest()->paginate(15);
+
+        return CustomerResource::collection($customers);
     }
 
-    // Mostrar um cliente específico
-    public function show(Customer $customer)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreCustomerRequest $request): CustomerResource
     {
-        return $customer;
+        $this->authorize('create', Customer::class);
+
+        $customer = Customer::create($request->validated());
+
+        return new CustomerResource($customer);
     }
 
-    // Criar um novo cliente
-    public function store(Request $request)
+    /**
+     * Display the specified resource.
+     */
+    public function show(Customer $customer): CustomerResource
     {
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:customers',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-        ]);
+        $this->authorize('view', $customer);
 
-        $customer = Customer::create($validatedData);
-        return response()->json($customer, 201);
+        return new CustomerResource($customer);
     }
 
-    // Atualizar um cliente existente
-    public function update(Request $request, Customer $customer)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateCustomerRequest $request, Customer $customer): CustomerResource
     {
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:customers,email,' . $customer->id,
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-        ]);
+        $this->authorize('update', $customer);
 
-        $customer->update($validatedData);
-        return response()->json($customer);
+        $customer->update($request->validated());
+
+        return new CustomerResource($customer);
     }
 
-    // Deletar um cliente
-    public function destroy(Customer $customer)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Customer $customer): JsonResponse
     {
+        $this->authorize('delete', $customer);
+
         $customer->delete();
-        return response()->json(null, 204);
+
+        return response()->json([
+            'message' => 'Cliente removido com sucesso.'
+        ], 200);
     }
 }

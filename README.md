@@ -1,66 +1,466 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CRM - Customer Relationship Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API RESTful para gerenciamento de relacionamento com clientes, construída com Laravel 11 e Laravel Sanctum.
 
-## About Laravel
+## 🚀 Tecnologias
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **PHP 8.2+**
+- **Laravel 11.9**
+- **Laravel Sanctum 4.0** (Autenticação API)
+- **MySQL 8.0**
+- **Redis** (Cache e sessões)
+- **Docker** (via Laravel Sail)
+- **PHPUnit** (Testes)
+- **Laravel Pint** (Code Style)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 Funcionalidades
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### ✅ Implementadas
 
-## Learning Laravel
+- **Autenticação**
+  - Registro de usuários
+  - Login com token JWT
+  - Logout
+  - Consulta de usuário autenticado
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Gestão de Clientes**
+  - Listagem com paginação
+  - Criação de clientes
+  - Visualização individual
+  - Atualização de dados
+  - Exclusão (soft delete)
+  - Validação de dados
+  - Autorização via Policies
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Dashboard**
+  - Estatísticas de clientes
+  - Novos clientes (mês/semana)
+  - Últimos 5 clientes cadastrados
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Segurança**
+  - Autenticação via Laravel Sanctum
+  - Rate limiting (60 requisições/minuto)
+  - Validação robusta de dados
+  - Políticas de autorização
 
-## Laravel Sponsors
+## 📦 Instalação
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Pré-requisitos
 
-### Premium Partners
+- Docker e Docker Compose
+- PHP 8.2+ (apenas para rodar localmente sem Docker)
+- Composer
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Passo a Passo
 
-## Contributing
+1. **Clone o repositório**
+```bash
+git clone <repository-url>
+cd crm
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Copie o arquivo de ambiente**
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+3. **Instale as dependências**
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Gere a chave da aplicação**
+```bash
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+5. **Inicie o Docker (Laravel Sail)**
+```bash
+./vendor/bin/sail up -d
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. **Execute as migrations e seeders**
+```bash
+./vendor/bin/sail artisan migrate --seed
+```
 
-## License
+7. **Acesse a aplicação**
+- API: `http://localhost/api/v1`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🧪 Testes
+
+Execute os testes com PHPUnit:
+
+```bash
+./vendor/bin/sail artisan test
+```
+
+Ou com coverage:
+
+```bash
+./vendor/bin/sail artisan test --coverage
+```
+
+### Cobertura de Testes
+
+- ✅ Testes Feature para CustomerController (15 testes)
+- ✅ Testes Feature para AuthController (11 testes)
+- ✅ Testes Unit para Customer Model (7 testes)
+- ✅ Testes Unit para User Model (6 testes)
+
+## 📚 Documentação da API
+
+### Base URL
+
+```
+http://localhost/api/v1
+```
+
+### Autenticação
+
+A API usa **Bearer Token** para autenticação. Adicione o header:
+
+```
+Authorization: Bearer {seu-token-aqui}
+```
+
+### Endpoints Públicos
+
+#### Registrar Usuário
+
+```http
+POST /api/v1/register
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+```
+
+**Resposta (201):**
+```json
+{
+  "message": "Usuário registrado com sucesso.",
+  "user": {
+    "id": 1,
+    "name": "João Silva",
+    "email": "joao@example.com"
+  },
+  "access_token": "1|xxxxxxxxxxxxx",
+  "token_type": "Bearer"
+}
+```
+
+#### Login
+
+```http
+POST /api/v1/login
+Content-Type: application/json
+
+{
+  "email": "joao@example.com",
+  "password": "password123"
+}
+```
+
+**Resposta (200):**
+```json
+{
+  "message": "Login realizado com sucesso.",
+  "user": {
+    "id": 1,
+    "name": "João Silva",
+    "email": "joao@example.com"
+  },
+  "access_token": "2|xxxxxxxxxxxxx",
+  "token_type": "Bearer"
+}
+```
+
+### Endpoints Protegidos (Requerem Autenticação)
+
+#### Logout
+
+```http
+POST /api/v1/logout
+Authorization: Bearer {token}
+```
+
+**Resposta (200):**
+```json
+{
+  "message": "Logout realizado com sucesso."
+}
+```
+
+#### Usuário Autenticado
+
+```http
+GET /api/v1/me
+Authorization: Bearer {token}
+```
+
+**Resposta (200):**
+```json
+{
+  "user": {
+    "id": 1,
+    "name": "João Silva",
+    "email": "joao@example.com"
+  }
+}
+```
+
+#### Dashboard
+
+```http
+GET /api/v1/dashboard
+Authorization: Bearer {token}
+```
+
+**Resposta (200):**
+```json
+{
+  "customers": {
+    "total": 50,
+    "new_this_month": 12,
+    "new_this_week": 3
+  },
+  "users": {
+    "total": 5
+  },
+  "recent_customers": [
+    {
+      "id": 50,
+      "full_name": "Maria Santos",
+      "email": "maria@example.com",
+      "created_at": "2025-01-06 10:30:00"
+    }
+  ]
+}
+```
+
+#### Listar Clientes
+
+```http
+GET /api/v1/customers?page=1
+Authorization: Bearer {token}
+```
+
+**Resposta (200):**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "first_name": "João",
+      "last_name": "Silva",
+      "full_name": "João Silva",
+      "email": "joao@example.com",
+      "phone": "11999999999",
+      "created_at": "2025-01-06 10:00:00",
+      "updated_at": "2025-01-06 10:00:00"
+    }
+  ],
+  "links": { ... },
+  "meta": {
+    "current_page": 1,
+    "per_page": 15,
+    "total": 50
+  }
+}
+```
+
+#### Criar Cliente
+
+```http
+POST /api/v1/customers
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "first_name": "Maria",
+  "last_name": "Santos",
+  "email": "maria@example.com",
+  "phone": "11988888888"
+}
+```
+
+**Resposta (201):**
+```json
+{
+  "data": {
+    "id": 2,
+    "first_name": "Maria",
+    "last_name": "Santos",
+    "full_name": "Maria Santos",
+    "email": "maria@example.com",
+    "phone": "11988888888",
+    "created_at": "2025-01-06 11:00:00",
+    "updated_at": "2025-01-06 11:00:00"
+  }
+}
+```
+
+#### Visualizar Cliente
+
+```http
+GET /api/v1/customers/{id}
+Authorization: Bearer {token}
+```
+
+#### Atualizar Cliente
+
+```http
+PUT /api/v1/customers/{id}
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "first_name": "Maria",
+  "last_name": "Santos Silva",
+  "email": "maria@example.com",
+  "phone": "11988888888"
+}
+```
+
+#### Deletar Cliente
+
+```http
+DELETE /api/v1/customers/{id}
+Authorization: Bearer {token}
+```
+
+**Resposta (200):**
+```json
+{
+  "message": "Cliente removido com sucesso."
+}
+```
+
+### Códigos de Status HTTP
+
+- `200 OK` - Requisição bem-sucedida
+- `201 Created` - Recurso criado com sucesso
+- `204 No Content` - Requisição bem-sucedida sem conteúdo
+- `400 Bad Request` - Dados inválidos
+- `401 Unauthorized` - Não autenticado
+- `403 Forbidden` - Não autorizado
+- `404 Not Found` - Recurso não encontrado
+- `422 Unprocessable Entity` - Erro de validação
+- `429 Too Many Requests` - Rate limit excedido
+- `500 Internal Server Error` - Erro do servidor
+
+## 🔒 Segurança
+
+- Autenticação via Laravel Sanctum (tokens)
+- Rate limiting: 60 requisições por minuto
+- Validação de dados em Form Requests
+- Autorização via Policies
+- Soft Deletes para clientes
+- Senhas hasheadas com bcrypt
+- Proteção contra SQL Injection (Eloquent ORM)
+- CSRF protection
+
+## 🏗️ Arquitetura
+
+### Padrões Utilizados
+
+- **MVC** (Model-View-Controller)
+- **Repository Pattern** (via Eloquent)
+- **Form Requests** (Validação)
+- **API Resources** (Serialização)
+- **Policies** (Autorização)
+- **Soft Deletes** (Exclusão lógica)
+
+### Estrutura de Diretórios
+
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── AuthController.php
+│   │   ├── CustomerController.php
+│   │   └── DashboardController.php
+│   ├── Requests/
+│   │   ├── StoreCustomerRequest.php
+│   │   └── UpdateCustomerRequest.php
+│   └── Resources/
+│       └── CustomerResource.php
+├── Models/
+│   ├── Customer.php
+│   └── User.php
+└── Policies/
+    └── CustomerPolicy.php
+```
+
+## 🛠️ Desenvolvimento
+
+### Code Style
+
+Execute o Laravel Pint para formatar o código:
+
+```bash
+./vendor/bin/sail pint
+```
+
+### IDE Helper
+
+Para melhor autocomplete no IDE:
+
+```bash
+./vendor/bin/sail artisan ide-helper:generate
+./vendor/bin/sail artisan ide-helper:models
+```
+
+## 📝 Próximos Passos
+
+### Funcionalidades Futuras
+
+- [ ] Sistema de roles e permissões
+- [ ] Gestão de negócios (deals)
+- [ ] Pipeline de vendas
+- [ ] Histórico de atividades
+- [ ] Tags e categorias
+- [ ] Anexos e documentos
+- [ ] Notificações
+- [ ] Relatórios avançados
+- [ ] Exportação de dados (CSV, PDF)
+- [ ] Busca e filtros avançados
+- [ ] Integração com e-mail
+- [ ] WebSockets para atualizações em tempo real
+
+### Melhorias Técnicas
+
+- [ ] Cache de queries
+- [ ] Jobs e Queues para operações pesadas
+- [ ] Events e Listeners
+- [ ] Observadores (Observers)
+- [ ] API Documentation (Swagger/OpenAPI)
+- [ ] CI/CD Pipeline
+- [ ] Monitoramento e logs
+
+## 📄 Licença
+
+Este projeto está sob a licença [MIT](https://opensource.org/licenses/MIT).
+
+## 👥 Contribuindo
+
+Contribuições são bem-vindas! Por favor:
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/NovaFuncionalidade`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+4. Push para a branch (`git push origin feature/NovaFuncionalidade`)
+5. Abra um Pull Request
+
+## 📧 Contato
+
+Para dúvidas ou sugestões, entre em contato através do email ou abra uma issue no repositório.
+
+---
+
+Desenvolvido com ❤️ usando Laravel 11
